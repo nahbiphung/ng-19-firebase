@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp, getApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
@@ -14,7 +14,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage())
-  ]
+    provideFirestore(() => {
+      // Connect to the custom database if specified
+      const databaseId = (environment.firebase as any).databaseId;
+      if (databaseId && databaseId !== '(default)') {
+        return getFirestore(getApp(), databaseId);
+      }
+      return getFirestore();
+    }),
+    provideStorage(() => getStorage()),
+  ],
 };
