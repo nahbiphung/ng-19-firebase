@@ -1,2 +1,15 @@
-<div>Hi</div>
-<div>{{ environmentInfo.version }}</div>
+<div class="app-container">
+  <h1>{{ title }}</h1>
+
+  <div class="environment-section">
+    <h2>Environment Info</h2>
+    <pre>{{ environmentInfo | json }}</pre>
+  </div>
+
+  <div class="firebase-section">
+    <h2>Firebase Status</h2>
+    <pre>{{ firebaseInfo | json }}</pre>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>
